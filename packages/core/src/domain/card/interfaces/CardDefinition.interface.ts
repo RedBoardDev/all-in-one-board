@@ -54,5 +54,7 @@ export interface CardDefinition<TData> {
   renderError?: (props: CardErrorProps) => React.ReactElement | null;
 
   behavior?: CardBehaviorConfig;
+
+  borderColor?: string;
 }
 
