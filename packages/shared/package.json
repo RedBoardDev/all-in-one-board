@@ -1,0 +1,21 @@
+{
+  "name": "@aob/shared",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "DDD building blocks and shared utilities for all-in-one-board",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts",
+      "types": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "dev": "tsc -b --watch",
+    "lint": "echo \"(todo) lint shared\"",
+    "test": "echo \"(todo) test shared\""
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}
