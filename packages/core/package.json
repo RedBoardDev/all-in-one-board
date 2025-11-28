@@ -14,6 +14,9 @@
     "lint": "echo \"(todo) lint core\"",
     "test": "echo \"(todo) test core\""
   },
+  "dependencies": {
+    "@aob/shared": "workspace:*"
+  },
   "devDependencies": {
     "typescript": "^5.9.3"
   }

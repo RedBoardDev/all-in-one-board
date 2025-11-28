@@ -145,4 +145,15 @@ export class Guard {
     }
     return Result.ok();
   }
+
+  /**
+   * Combines multiple validation results.
+   * Returns the first failure encountered, or ok if all succeed.
+   */
+  public static combine(results: Result<void>[]): Result<void> {
+    for (const result of results) {
+      if (result.isFailure) return result;
+    }
+    return Result.ok();
+  }
 }

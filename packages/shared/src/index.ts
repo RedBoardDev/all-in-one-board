@@ -4,6 +4,7 @@ export { UniqueEntityID } from './domain/UniqueEntityId';
 export { Entity } from './domain/Entity';
 export { ValueObject } from './domain/ValueObject';
 export { AggregateRoot } from './domain/AggregateRoot';
+export { Timestamp } from './domain/value-objects/Timestamp.vo';
 
 // Domain events
 export type { DomainEvent } from './domain/events/DomainEvent';
