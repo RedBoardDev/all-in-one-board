@@ -1,0 +1,23 @@
+{
+  "name": "@aob/cards",
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts",
+      "types": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "dev": "tsc -b --watch",
+    "lint": "echo \"(todo) lint cards\"",
+    "test": "echo \"(todo) test cards\""
+  },
+  "dependencies": {
+    "@aob/core": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}
