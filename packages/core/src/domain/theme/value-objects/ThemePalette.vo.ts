@@ -43,14 +43,14 @@ export class ThemePalette extends ValueObject<ThemePaletteProps> {
 
   public static light(): ThemePalette {
     return new ThemePalette({
-      background: '#ffffff',
-      surface: '#f5f5f5',
-      surfaceAlt: '#e0e0e0',
+      background: '#e0e0d8',
+      surface: '#e8e8e0',
+      surfaceAlt: '#d5d5cd',
       text: '#1a1a1a',
       textMuted: '#6b7280',
       accent: '#3b82f6',
       accentSoft: '#dbeafe',
-      border: '#d1d5db',
+      border: '#c8c8c0',
       danger: '#ef4444',
       success: '#10b981',
       warning: '#f59e0b',
@@ -59,14 +59,14 @@ export class ThemePalette extends ValueObject<ThemePaletteProps> {
 
   public static dark(): ThemePalette {
     return new ThemePalette({
-      background: '#0a0a0a',
+      background: '#0a0f1a',
       surface: '#1a1a1a',
-      surfaceAlt: '#2a2a2a',
-      text: '#f5f5f5',
+      surfaceAlt: '#252525',
+      text: '#e0e1dd',
       textMuted: '#9ca3af',
       accent: '#3b82f6',
       accentSoft: '#1e3a8a',
-      border: '#374151',
+      border: '#2a2a2a',
       danger: '#ef4444',
       success: '#10b981',
       warning: '#f59e0b',

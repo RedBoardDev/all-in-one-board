@@ -77,7 +77,7 @@ export class KernelImpl implements KernelAPI {
   }
 
   public toggleTheme(): void {
-    this.themeService.toggleTheme();
+    void this.themeService.toggleTheme();
   }
 
   public subscribe(listener: () => void): () => void {

@@ -1,5 +1,8 @@
 import { Theme } from '../../domain/theme/entities/Theme.entity';
 import type { LoggerPort } from '../ports/LoggerPort.interface';
+import type { StoragePort } from '../ports/StoragePort.interface';
+
+const THEME_STORAGE_KEY = 'aob-theme';
 
 export class ThemeService {
   private currentTheme: Theme;
@@ -7,7 +10,8 @@ export class ThemeService {
 
   constructor(
     private logger: LoggerPort,
-    initialTheme?: Theme
+    initialTheme?: Theme,
+    private storage?: StoragePort
   ) {
     this.currentTheme = initialTheme ?? Theme.light();
   }
@@ -16,15 +20,22 @@ export class ThemeService {
     return this.currentTheme;
   }
 
-  public setTheme(theme: Theme): void {
+  public async setTheme(theme: Theme): Promise<void> {
     this.currentTheme = theme;
     this.notifyListeners();
     this.logger.debug(`Theme changed to ${theme.mode.value}`);
+
+    if (this.storage) {
+      const result = await this.storage.setItem(THEME_STORAGE_KEY, theme.mode.value);
+      if (result.isFailure) {
+        this.logger.warn(`Failed to save theme to storage: ${result.getError()}`);
+      }
+    }
   }
 
-  public toggleTheme(): void {
+  public async toggleTheme(): Promise<void> {
     const newTheme = this.currentTheme.toggle();
-    this.setTheme(newTheme);
+    await this.setTheme(newTheme);
   }
 
   public subscribe(listener: (theme: Theme) => void): () => void {

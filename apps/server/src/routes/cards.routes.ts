@@ -41,6 +41,11 @@ interface ErrorResponse {
 export async function registerCardRoutes(app: FastifyInstance): Promise<void> {
   app.get<{ Reply: CardListResponse }>(
     '/api/cards',
+    {
+      config: {
+        rateLimit: false,
+      },
+    },
     async (_request: FastifyRequest, reply: FastifyReply<{ Reply: CardListResponse }>) => {
       const cardsList = allCards.map(card => ({
         id: card.id.toValue(),

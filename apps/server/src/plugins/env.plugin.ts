@@ -46,7 +46,7 @@ export async function registerEnvPlugin(app: FastifyInstance): Promise<void> {
         },
         RATE_LIMIT_MAX: {
           type: 'number',
-          default: 100,
+          default: 80,
         },
         RATE_LIMIT_TIME_WINDOW_MS: {
           type: 'number',
