@@ -28,4 +28,12 @@ export class CardId extends Identifier<string> {
   public static fromTrustedSource(value: string): CardId {
     return new CardId(value);
   }
+
+  public static createOrThrow(value: string): CardId {
+    const result = this.create(value);
+    if (result.isFailure) {
+      throw new Error(`CardId creation failed: ${result.getError()}`);
+    }
+    return result.getValue();
+  }
 }

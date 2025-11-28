@@ -1,11 +1,13 @@
 import type { KernelAPI } from './KernelAPI.interface';
 import type { CardModel } from '../../domain/card/entities/CardModel.entity';
+import type { CardDefinition } from '../../domain/card/interfaces/CardDefinition.interface';
 import type { CardState } from '../../domain/card/entities/CardState.entity';
 import type { CardId } from '../../domain/card/value-objects/CardId.vo';
 import type { Theme } from '../../domain/theme/entities/Theme.entity';
 import type { BoardService } from '../services/BoardService.service';
 import type { CardRefreshService } from '../services/CardRefreshService.service';
 import type { ThemeService } from '../services/ThemeService.service';
+import { CardDefinitionAdapter } from '../../domain/card/adapters/CardDefinitionAdapter';
 
 export class KernelImpl implements KernelAPI {
   private listeners: Set<() => void> = new Set();
@@ -19,8 +21,15 @@ export class KernelImpl implements KernelAPI {
     this.cardRefreshService.setOnStateChange(() => this.notifyListeners());
   }
 
-  public registerCard<T>(cardModel: CardModel<T>): void {
-    const registerResult = this.boardService.registerCard(cardModel);
+  public registerCard<T>(cardDefinition: CardDefinition<T>): void {
+    const cardModelResult = CardDefinitionAdapter.toCardModel(cardDefinition);
+    if (cardModelResult.isFailure) {
+      throw new Error(`Failed to convert CardDefinition to CardModel: ${cardModelResult.getError()}`);
+    }
+
+    const cardModel = cardModelResult.getValue();
+
+    const registerResult = this.boardService.registerCardDefinition(cardDefinition, cardModel);
     if (registerResult.isFailure) {
       throw new Error(registerResult.getError() as string);
     }
@@ -47,8 +56,8 @@ export class KernelImpl implements KernelAPI {
     this.notifyListeners();
   }
 
-  public getRegisteredCards(): CardModel<any>[] {
-    return this.boardService.getAllCardModels();
+  public getRegisteredCards(): CardDefinition<any>[] {
+    return this.boardService.getAllCardDefinitions();
   }
 
   public getCardState(cardId: CardId): CardState | undefined {

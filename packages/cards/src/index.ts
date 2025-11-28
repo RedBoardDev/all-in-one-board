@@ -8,3 +8,7 @@ export const allCards: CardDefinition<any>[] = [
   ClockCard,
   QuoteCard,
 ];
+
+export const cardsById = new Map(
+  allCards.map(card => [card.id.toValue(), card])
+);

@@ -1,6 +1,7 @@
 import { Result } from '@aob/shared';
 import { CardId } from '../../domain/card/value-objects/CardId.vo';
 import type { BoardService } from './BoardService.service';
+import type { CardDataPort } from '../ports/CardDataPort.interface';
 import type { TimePort } from '../ports/TimePort.interface';
 import type { LoggerPort } from '../ports/LoggerPort.interface';
 import type { TimerId } from '../ports/TimerId.type';
@@ -11,6 +12,7 @@ export class CardRefreshService {
 
   constructor(
     private boardService: BoardService,
+    private dataPort: CardDataPort,
     private timePort: TimePort,
     private logger: LoggerPort
   ) {}
@@ -65,8 +67,17 @@ export class CardRefreshService {
     this.notifyStateChange();
 
     try {
-      const data = await Promise.resolve(cardModel.data.getData());
-      cardState.setData(data);
+      const result = await this.dataPort.fetchData(cardId);
+
+      if (result.isFailure) {
+        const error = new Error(result.getError());
+        cardState.setError(error);
+        this.logger.error(`Card ${cardId.toValue()} refresh failed`, error);
+        this.notifyStateChange();
+        return Result.fail(`Failed to refresh card: ${result.getError()}`);
+      }
+
+      cardState.setData(result.getValue());
       this.logger.debug(`Card ${cardId.toValue()} refreshed successfully`);
       this.notifyStateChange();
       return Result.ok();

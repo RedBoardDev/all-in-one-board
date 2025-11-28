@@ -66,4 +66,12 @@ export class LayoutConstraints extends ValueObject<LayoutConstraintsProps> {
   get maxH(): number | undefined {
     return this.props.maxH;
   }
+
+  public static createOrThrow(props: LayoutConstraintsProps): LayoutConstraints {
+    const result = this.create(props);
+    if (result.isFailure) {
+      throw new Error(`LayoutConstraints creation failed: ${result.getError()}`);
+    }
+    return result.getValue();
+  }
 }
