@@ -1,49 +1,74 @@
-# all-in-one-board
+<div style="display: flex; align-items: center; font-size: 2.7em; font-weight: bold;">
+  <img src="apps/web/public/aob_icon.png" alt="all-in-one-board logo" height="48" style="vertical-align: middle; margin-right: 12px;" />
+  <span style="font-size: 1em;">all-in-one-board</span>
+</div>
 
-> A one-page, bento-style personal dashboard where every card is code. Fetch any data you want, render it however you like, and see everything in a single view.
-
----
+<br />
 
 ## ✨ What is this?
 
-**all-in-one-board** is a framework for building your own **personal, one-page dashboard**.
+**all-in-one-board** is a TypeScript/React framework for building your own **personal, unified dashboard**.
+Instead of browsing 10 different sites for your daily info (crypto, tokens, weather, analytics, news…), just open **one page**—yours—and see it all, live.
 
-Instead of clicking through 10 websites each morning (crypto PnL, token prices, weather, promos, news…), you open **one page** and see **everything**:
+Cards handle anything you like:
 
-- crypto prices, farm bots PnL, APY…
-- metrics/analytics from any API
-- weather, news, promos, whatever
-- anything you can fetch or compute in code
+- crypto prices, DeFi PnL, APY, portfolio health…
+- real-time analytics from any API
+- weather, news headlines, shopping promos – you decide
+- anything you can fetch or compute with code
 
-You write **cards** in TypeScript/React.
-Each card defines:
+Cards are **just code** – you write them in TypeScript/React. Every card consists of:
 
-1. **How to fetch data** – completely free-form (`getData(): T | Promise<T>`)
-2. **How to render it** – custom UI (`render(props)`)
+1. **Data fetching logic:**
+   Free-form function: `getData(): T | Promise<T>`
+2. **Rendering:**
+   Custom React UI: `render(props)`
 
-The **kernel** takes care of:
+The **core (kernel)** provides:
 
-- theme (light/dark + coherent colors)
-- bento-style responsive layout
-- loading / error states
-- per-card refresh + global “Refresh All”
-- optional default skeleton & error UIs
+- automatic theme (light/dark), coherent card colors
+- responsive bento-style layout (desktops & mobiles)
+- loading indicators & error states
+- “refresh all data” & per-card refresh
+- optional: default skeleton/error UI for fast prototyping
 
----
+<br />
 
-## 🧠 Core ideas
+## 🧠 Core Principles
 
-- **One-page dashboard**
-  Everything is shown on a single responsive page (desktop + mobile).
+- **One-page experience:**
+  Everything tiled in a single, fast, responsive view.
+- **Cards = code:**
+  No rigid widgets. You control data and UI per card. No boundaries.
+- **Kernel-driven orchestration:**
+  The framework manages card registration, state, refresh, layout, and theming.
+- **Flexible bento layout:**
+  Supports KPI tiles, big charts, mixed grid – all snap together.
+- **No data constraints:**
+  Fetch from REST, websockets, files, or compute directly. Anything goes.
+- **TypeScript-first:**
+  Your card types and logic are fully typesafe, strongly typed front-to-back.
 
-- **Cards are just code**
-  No rigid prebuilt widgets. Each card defines its own data type, data fetch and UI.
+<br />
 
-- **Kernel-driven orchestration**
-  A core layer manages card registration, state, refresh, theme and layout.
+## 🚀 Get started
 
-- **Bento layout**
-  Cards of different sizes tile nicely into a grid (big graphs, tiny KPIs, etc.).
+1. **Install:**
+   ```sh
+   pnpm install
+   ```
+2. **Start the dashboard app:**
+   ```sh
+   pnpm --filter @aob/web dev
+   ```
+3. **Edit or add cards:**
+   Work in `packages/cards/src/`. Cards export their data-fetch + render code.
 
-- **Zero constraints on data**
-  REST APIs
+<br />
+
+## 📦 Tech used
+
+- React 19, Vite 7, TypeScript 5, node v25.x
+- Turborepo monorepo
+- Everything modular—bring your own styles, data sources, preferences.
+
