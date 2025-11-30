@@ -2,6 +2,7 @@
   "name": "all-in-one-board",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "packageManager": "pnpm@10.24.0",
   "engines": {
     "node": ">=22"
@@ -10,7 +11,8 @@
     "dev": "turbo run dev",
     "build": "turbo run build",
     "lint": "turbo run lint",
-    "test": "turbo run test"
+    "test": "turbo run test",
+    "create-card": "node scripts/create-card.js"
   },
   "devDependencies": {
     "turbo": "^2.6.1",
