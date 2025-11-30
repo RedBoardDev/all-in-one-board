@@ -4,16 +4,21 @@ import type { CardRenderProps } from '../../../presentation/contracts/CardRender
 import type { CardSkeletonProps } from '../../../presentation/contracts/CardSkeletonProps.contract';
 import type { CardErrorProps } from '../../../presentation/contracts/CardErrorProps.contract';
 
-/**
- * * Simple interface for refresh policy configuration
- *
- * Note: This is the interface type for CardDefinition.
- * The Value Object RefreshPolicy class is used internally by the kernel.
- */
-export interface RefreshPolicyConfig {
-  intervalMs?: number;           // Auto-refresh interval in milliseconds
-  enableGlobalRefresh?: boolean; // Whether this card reacts to "Refresh All"
-  skipInitialFetch?: boolean;    // If true, skip fetch on mount
+export type RateLimitFallback = 'cache' | 'error';
+
+export interface RateLimitPolicyConfig {
+  windowMs: number;
+  maxRequests: number;
+  fallback?: RateLimitFallback;
+}
+
+export interface DataPolicyConfig {
+  source: string;
+  resourceIds: string[];
+  cacheTtlMs?: number;
+  rateLimit?: RateLimitPolicyConfig;
+  batch?: boolean;
+  batchWindowMs?: number;
 }
 
 /**
@@ -41,8 +46,6 @@ export interface CardDefinition<TData> {
   // * Data fetching (completely free-form)
   getData: () => Promise<TData> | TData;
 
-  refresh?: RefreshPolicyConfig;
-
   // * Rendering
   // Note: Using React.ReactElement type - React types should be available
   // in packages that use cards (like @aob/cards and @aob/web)
@@ -55,6 +58,9 @@ export interface CardDefinition<TData> {
 
   behavior?: CardBehaviorConfig;
 
-  borderColor?: string;
-}
+  dataPolicy?: DataPolicyConfig;
 
+  borderColor?: string;
+
+  externalLink?: string;
+}

@@ -34,20 +34,12 @@ export class KernelImpl implements KernelAPI {
       throw new Error(registerResult.getError() as string);
     }
 
-    if (cardModel.data.refresh.hasAutoRefresh()) {
-      this.cardRefreshService.startAutoRefresh(cardModel.cardId);
-    }
-
-    if (!cardModel.data.refresh.skipInitialFetch) {
-      this.cardRefreshService.refreshCard(cardModel.cardId);
-    }
+    void this.cardRefreshService.refreshCard(cardModel.cardId);
 
     this.notifyListeners();
   }
 
   public unregisterCard(cardId: CardId): void {
-    this.cardRefreshService.stopAutoRefresh(cardId);
-
     const unregisterResult = this.boardService.unregisterCard(cardId);
     if (unregisterResult.isFailure) {
       throw new Error(unregisterResult.getError() as string);
@@ -64,12 +56,12 @@ export class KernelImpl implements KernelAPI {
     return this.boardService.getCardState(cardId);
   }
 
-  public requestRefresh(cardId: CardId): void {
-    void this.cardRefreshService.refreshCard(cardId);
+  public async requestRefresh(cardId: CardId): Promise<void> {
+    await this.cardRefreshService.refreshCard(cardId);
   }
 
-  public requestRefreshAll(): void {
-    void this.cardRefreshService.refreshAll();
+  public async requestRefreshAll(): Promise<void> {
+    await this.cardRefreshService.refreshAll();
   }
 
   public getTheme(): Theme {

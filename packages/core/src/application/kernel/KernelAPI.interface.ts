@@ -13,8 +13,8 @@ export interface KernelAPI {
 
   getCardState(cardId: CardId): CardState | undefined;
 
-  requestRefresh(cardId: CardId): void;
-  requestRefreshAll(): void;
+  requestRefresh(cardId: CardId): Promise<void>;
+  requestRefreshAll(): Promise<void>;
 
   getTheme(): Theme;
   toggleTheme(): void;
@@ -23,5 +23,4 @@ export interface KernelAPI {
 
   cleanup(): void;
 }
-
 

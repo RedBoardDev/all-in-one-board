@@ -10,7 +10,7 @@ export interface CardMetadata {
 }
 
 export interface CardActions {
-  requestRefresh: () => void;
+  requestRefresh: () => Promise<void>;
 }
 
 export interface CardRenderProps<TData> {
