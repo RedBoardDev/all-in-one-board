@@ -1,9 +1,9 @@
-<div style="display: flex; align-items: center; font-size: 2.7em; font-weight: bold;">
-  <img src="apps/web/public/aob_icon.png" alt="all-in-one-board logo" height="48" style="vertical-align: middle; margin-right: 12px;" />
-  <span style="font-size: 1em;">all-in-one-board</span>
-</div>
-
-<br />
+<p align="center">
+  <img src="apps/web/public/aob_icon.png" alt="all-in-one-board logo" height="76" />
+</p>
+<h1 align="center">
+  all-in-one-board
+</h1>
 
 ## ✨ What is this?
 
