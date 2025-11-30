@@ -1,6 +1,7 @@
 import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
-import { allCards, cardsById } from '@aob/cards';
+import { allCards, cardsById, batchFetchers, defaultPolicies } from '@aob/cards';
 import { mapDomainErrorToHttpResponse } from '@aob/shared';
+import { ApiGatewayService, RateLimitedError } from '../services/api-gateway.service.js';
 
 interface CardParams {
   cardId: string;
@@ -39,13 +40,21 @@ interface ErrorResponse {
 }
 
 export async function registerCardRoutes(app: FastifyInstance): Promise<void> {
+  const loggerAdapter = {
+    debug: (msg: string, meta?: unknown) => app.log.debug(meta ?? {}, msg),
+    info: (msg: string, meta?: unknown) => app.log.info(meta ?? {}, msg),
+    warn: (msg: string, meta?: unknown) => app.log.warn(meta ?? {}, msg),
+    error: (msg: string, meta?: unknown, err?: unknown) => app.log.error(meta ?? {}, msg, err),
+  };
+
+  const apiGateway = new ApiGatewayService({
+    defaultPolicies,
+    batchFetchers,
+    logger: loggerAdapter,
+  });
+
   app.get<{ Reply: CardListResponse }>(
     '/api/cards',
-    {
-      config: {
-        rateLimit: false,
-      },
-    },
     async (_request: FastifyRequest, reply: FastifyReply<{ Reply: CardListResponse }>) => {
       const cardsList = allCards.map(card => ({
         id: card.id.toValue(),
@@ -58,7 +67,6 @@ export async function registerCardRoutes(app: FastifyInstance): Promise<void> {
           maxW: card.layout.maxW,
           maxH: card.layout.maxH,
         },
-        refresh: card.refresh,
       }));
 
       return reply.send({ cards: cardsList });
@@ -82,7 +90,7 @@ export async function registerCardRoutes(app: FastifyInstance): Promise<void> {
       }
 
       try {
-        const data = await Promise.resolve(card.getData());
+        const data = await apiGateway.fetchCardData(card);
 
         return reply.send({
           cardId,
@@ -90,6 +98,14 @@ export async function registerCardRoutes(app: FastifyInstance): Promise<void> {
           timestamp: Date.now(),
         });
       } catch (error) {
+        if (error instanceof RateLimitedError) {
+          return reply.status(429).send({
+            error: 'RATE_LIMITED',
+            message: error.message,
+            cardId,
+          });
+        }
+
         const httpError = mapDomainErrorToHttpResponse(
           error instanceof Error ? error : new Error(String(error))
         );
@@ -105,4 +121,3 @@ export async function registerCardRoutes(app: FastifyInstance): Promise<void> {
     }
   );
 }
-

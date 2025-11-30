@@ -2,7 +2,6 @@ import Fastify, { type FastifyInstance } from 'fastify';
 import { registerEnvPlugin } from './plugins/env.plugin.js';
 import { registerSecurityPlugins } from './plugins/security.plugin.js';
 import { registerCorsPlugin } from './plugins/cors.plugin.js';
-import { registerRateLimitPlugin } from './plugins/rate-limit.plugin.js';
 import { registerCardRoutes } from './routes/cards.routes.js';
 
 export async function createServer(): Promise<FastifyInstance> {
@@ -21,8 +20,6 @@ export async function createServer(): Promise<FastifyInstance> {
 
   await registerSecurityPlugins(app);
   await registerCorsPlugin(app);
-
-  await registerRateLimitPlugin(app);
 
   await registerCardRoutes(app);
 
@@ -46,4 +43,3 @@ export async function startServer(): Promise<FastifyInstance> {
     process.exit(1);
   }
 }
-
